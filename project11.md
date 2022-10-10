@@ -13,7 +13,7 @@ A [Jump Server](https://en.wikipedia.org/wiki/Jump_server) (sometimes also refer
 
 On the diagram below the Virtual Private Network (VPC) is divided into [two subnets](https://docs.aws.amazon.com/vpc/latest/userguide/how-it-works.html) – Public subnet has public IP addresses and Private subnet is only reachable by private IP addresses.
 
-![VPC](../images/VPC.png)
+![VPC](images/VPC.png)
 
 When you reach Project 15, you will see a Bastion host in proper action. But for now, we will develop **Ansible** scripts to simulate the use of a <mark>Jump box/Bastion host</mark> to access our Web Servers.
 
@@ -44,15 +44,15 @@ Check your Ansible version by running ansible <mark>--version</mark>
 
 `ls /var/lib/jenkins/jobs/ansible/builds/<build_number>/archive/`
 
-![Github changes to readme](../images/git-changesreadme.png)
+![Github changes to readme](images/git-changesreadme.png)
 
-![Changes in README.md](../images/changes-readmemd.png)
+![Changes in README.md](images/changes-readmemd.png)
 
 Note: Trigger Jenkins project execution only for /main (master) branch.
 
 Now your setup will look like this:
 
-![Project11 architecture](../images/project11-architecture.png)
+![Project11 architecture](images/project11-architecture.png)
 
 Tip Every time you stop/start your <mark>Jenkins-Ansible</mark> server – you have to reconfigure GitHub webhook to a new IP address, in order to avoid it, it makes sense to allocate an [Elastic IP](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html) to your <mark>Jenkins-Ansible</mark>) server (you have done it before to your LB server in Project 10). Note that Elastic IP is free only when it is being allocated to an EC2 Instance, so do not forget to release Elastic IP once you terminate your EC2 Instance.
 
@@ -64,7 +64,7 @@ Clone down your ansible-config-mgt repo to your Jenkins-Ansible instance
 
 `git clone <ansible-config-mgt repo link>`
 
-![Clone repo](../images/gitclone-repo.png)
+![Clone repo](images/gitclone-repo.png)
 
 ## BEGIN ANSIBLE DEVELOPMENT
 
@@ -77,7 +77,7 @@ Tip: Give your branches descriptive and comprehensive names, for example, if you
 5. Within the playbooks folder, create your first playbook, and name it <mark>common.yml</mark>
 6. Within the inventory folder, create an inventory file (.yml) for each environment (Development, Staging Testing and Production) <mark>dev, staging, uat, and prod</mark> respectively.
 
-![Create branch directories and files](../images/createbranch-directoryfiles.png)
+![Create branch directories and files](images/createbranch-directoryfiles.png)
 
 ### Step 4 – Set up an Ansible Inventory
 
@@ -125,7 +125,7 @@ Update your <mark>inventory/dev.yml</mark> file with this snippet of code:
 <Load-Balancer-Private-IP-Address> ansible_ssh_user='ubuntu'
 ```
 
-![Inventory/dev.yml](../images/inventorydev-yml.png)
+![Inventory/dev.yml](images/inventorydev-yml.png)
 
 
 ## CREATE A COMMON PLAYBOOK
@@ -167,7 +167,7 @@ Update your <mark>playbooks/common.yml</mark> file with following code:
         state: latest
 ```
 
-![Update common.yml](../images/updatecommon-yml.png)
+![Update common.yml](images/updatecommon-yml.png)
 
 Examine the code above and try to make sense out of it. This playbook is divided into two parts, each of them is intended to perform the same task: install [wireshark](https://en.wikipedia.org/wiki/Wireshark) utility (or make sure it is updated to the latest version) on your RHEL 8 and Ubuntu servers. It uses <mark>root</mark> user to perform this task and respective package manager: <mark>yum</mark> for RHEL 8 and <mark>apt</mark> for Ubuntu.
 
@@ -199,24 +199,24 @@ git add <selected files>
 
 git commit -m "commit message"
 ```
-![Git commits](../images/gitstatusadd-commitpush.png)
+![Git commits](images/gitstatusadd-commitpush.png)
 
 2. Create a Pull request (PR)
 3. Wear a hat of another developer for a second, and act as a reviewer.
 4. If the reviewer is happy with your new feature development, merge the code to the <mark>master</mark> branch.
 5. Head back on your terminal, checkout from the feature branch into the master, and pull down the latest changes.
 
-![PR merged](../images/PR-merged.png)
+![PR merged](images/PR-merged.png)
 
-![Git pull](../images/git-pull.png)
+![Git pull](images/git-pull.png)
 
 Once your code changes appear in <mark>main</mark> branch – Jenkins will do its job and save all the files (build artifacts) to <mark>/var/lib/jenkins/jobs/ansible/builds/<build_number>/archive/</mark> directory on <mark>Jenkins-Ansible</mark> server.
 
-![Jenkins build artifacts](../images/Jenkins-buildartifacts.png)
+![Jenkins build artifacts](images/Jenkins-buildartifacts.png)
 
-![Updated file](../images/updated-files.png)
+![Updated file](images/updated-files.png)
 
-![Jenkins build status](../images/build-status.png)
+![Jenkins build status](images/build-status.png)
 
 
 
@@ -236,40 +236,40 @@ You can go to each of the servers and check if <mark>wireshark</mark> has been i
 
 nfs server
 
-![Nfs server wireshark](../images/nfs-wirshark.png)
+![Nfs server wireshark](images/nfs-wirshark.png)
 
 webserver1
 
-![webserver1 wireshark](../images/Webserver1-wireshark.png)
+![webserver1 wireshark](images/Webserver1-wireshark.png)
 
 
 webserver2
 
-![webserver2 wireshark](../images/webserver2-wireshark.png)
+![webserver2 wireshark](images/webserver2-wireshark.png)
 
 Load balancer
 
-![nginx LB  wireshark](../images/NginxLB-wireshark.png)
+![nginx LB  wireshark](images/NginxLB-wireshark.png)
 
 
 Database server
 
-![Database wireshark](../images/db-wireshark.png)
+![Database wireshark](images/db-wireshark.png)
 
 
 
 
 Your updated with Ansible architecture now looks like this:
 
-![Ansible Architecture](../images/ansible-architecture.png)
+![Ansible Architecture](images/ansible-architecture.png)
 
 #### Optional step – Repeat once again
 Update your ansible playbook with some new Ansible tasks and go through the full <mark>checkout -> change codes -> commit -> PR -> merge -> build -> ansible-playbook</mark> cycle again to see how easily you can manage a servers fleet of any size with just one command!
 
 
-![Update ansible playbook with some tasks](../images/modify-commonyml.png)
+![Update ansible playbook with some tasks](images/modify-commonyml.png)
 
-![West african time updated](../images/WestAfrican-time_updated.png)
+![West african time updated](images/WestAfrican-time_updated.png)
 
 Congratulations
 You have just automated your routine tasks by implementing your first Ansible project! There is more exciting projects ahead, so lets keep it moving!
